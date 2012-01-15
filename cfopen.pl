@@ -32,8 +32,8 @@ for (my $i = 0; $i < @samples/2; $i++) {
     my $output = $samples[2*$i+1];
 
     # I hope there will be no samples with "<br />" as an actual data inside!
-    $input  =~ s/<br \/>/\n/g;
-    $output =~ s/<br \/>/\n/g;
+    $input  =~ s/<br \/>/\\n/g;
+    $output =~ s/<br \/>/\\n/g;
 
     push(@inputs, $input);
     push(@outputs, $output);
@@ -44,15 +44,34 @@ for (my $i = 0; $i < @samples/2; $i++) {
 
 # At this point we have sample inputs in @inputs and sample outputs in @outputs
 # And we are going to produce file with name like task143A.java
-my $task_file_name = "task$contest_id$task_id.java";
+my $task_class_name = "task$contest_id$task_id";
+my $task_file_name = "$task_class_name.java";
 print "Creating file $task_file_name\n";
 
 open(TEMPLATE, "<template.java");
 open(CONCRETE, ">$task_file_name");
 
-# We will 
 my $tests_section = 0;
 while (<TEMPLATE>) {
-  my $line = $_;
-  print CONCRETE $line; 
+    my $line = $_;
+    if ($line =~ /\*{3} START TESTS/) {
+        $tests_section = 1;
+        for (my $i = 0; $i < @inputs; $i++) {
+            print CONCRETE "{\"$inputs[$i]\",\"$outputs[$i]\"},\n";
+        }
+        next;
+    }
+    if ($line =~ /\*{3} END TESTS/) {
+        $tests_section = 0;
+        next;
+    }
+    if ($tests_section) {
+        next;
+    }
+
+    $line =~ s/%task_class_name%/$task_class_name/;
+    print CONCRETE $line; 
 }
+
+print "Ok. Created file $task_file_name\n"
+

@@ -2,25 +2,20 @@
 import java.io.*;
 import java.util.*;
 
-public class %task_file_name% {
-
-    // *** START CUT
-    // THIS TEXT WILL BE CUTTED OUT UNTIL NEAREST '*** END'
+public class %task_class_name% {
 
     private InputStream is = null;
     private OutputStream os = null;
 
-    public Main() {
+    public %task_class_name%() {
         is = System.in;
         os = System.out;
     }
 
-    public Main(InputStream is, OutputStream os) {
+    public %task_class_name%(InputStream is, OutputStream os) {
         this.is = is;
         this.os = os;
     }
-
-    // *** END CUT
 
     public static void main(String[] args) {
         boolean localMachine = false;
@@ -53,15 +48,16 @@ public class %task_file_name% {
         // *** END CUT
 
         if (!localMachine) {
-            new Main().main();
+            new %task_class_name%().main();
         }
 
     }
 
+    // *** START CUT
     public static int test(String input, String output) {
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(input.getBytes());
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        new Main(byteArrayInputStream, byteArrayOutputStream).main();
+        new %task_class_name%(byteArrayInputStream, byteArrayOutputStream).main();
         String sol = byteArrayOutputStream.toString();
         int res = 0;
 
@@ -76,6 +72,7 @@ public class %task_file_name% {
         }
         return res;
     }
+    // *** END CUT
 
     void main() {
         Scanner s = new Scanner(is);
